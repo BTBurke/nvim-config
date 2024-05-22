@@ -8,8 +8,6 @@
 --
 -- File: plugins/lsp.lua
 -- Description: LSP setup and config
--- Author: Kien Nguyen-Tuan <kiennt2609@gmail.com>
--- Enable some language servers with the additional completion capabilities offered by nvim-cmp
 return {{
     -- Mason
     "williamboman/mason.nvim",
@@ -71,9 +69,9 @@ return {{
             dockerls = {},
             bashls = {},
             gopls = {},
-            ruff_lsp = {},
             vimls = {},
-            yamlls = {}
+            yamlls = {},
+            tsserver = {}
         },
         -- you can do any additional lsp server setup here
         -- return true if you don"t want this server to be setup with lspconfig
@@ -182,8 +180,8 @@ return {{
             })
         end
     },
-                    {"saadparwaiz1/cmp_luasnip", "hrsh7th/cmp-nvim-lua", "hrsh7th/cmp-nvim-lsp", "hrsh7th/cmp-buffer",
-                     "hrsh7th/cmp-path"}}, -- cmp sources plugins
+      {"saadparwaiz1/cmp_luasnip", "hrsh7th/cmp-nvim-lua", "hrsh7th/cmp-nvim-lsp", "hrsh7th/cmp-buffer", "hrsh7th/cmp-path"}
+    }, -- cmp sources plugins
     opts = function()
         local cmp = require "cmp"
 
@@ -194,11 +192,15 @@ return {{
 
         local options = {
             completion = {
-                completeopt = "menu,menuone"
+                autocomplete = false,
+                completeopt = "menu,menuone",
+                winhighlight = "Normal:CmpPmenu,CursorLine:CmpSel,Search:PmenuSel",
+                border = border "CmpDocBorder",
             },
 
             window = {
                 completion = {
+                    autocomplete = false,
                     winhighlight = "Normal:CmpPmenu,CursorLine:CmpSel,Search:PmenuSel",
                     scrollbar = false
                 },
@@ -207,66 +209,32 @@ return {{
                     winhighlight = "Normal:CmpDoc"
                 }
             },
-
             snippet = {
                 expand = function(args)
                     require("luasnip").lsp_expand(args.body)
                 end
             },
-
             mapping = {
-                ["<C-p>"] = cmp.mapping.select_prev_item(),
-                ["<C-n>"] = cmp.mapping.select_next_item(),
-                ["<C-d>"] = cmp.mapping.scroll_docs(-4),
-                ["<C-f>"] = cmp.mapping.scroll_docs(4),
+                -- completion is only activated manually with Ctrl-Space
+                -- up/down to page through options, tab/enter to select
+                ["<Down>"] = cmp.mapping.select_next_item(),
+                ["<Up>"] = cmp.mapping.select_prev_item(),
                 ["<C-Space>"] = cmp.mapping.complete(),
-                ["<C-e>"] = cmp.mapping.close(),
+                ["<C-esc"] = cmp.mapping.close(),
+                ["<Tab>"] = cmp.mapping.confirm {
+                    behavior = cmp.ConfirmBehavior.Insert,
+                    select = true
+                },
                 ["<CR>"] = cmp.mapping.confirm {
                     behavior = cmp.ConfirmBehavior.Insert,
                     select = true
                 },
-                ["<Tab>"] = cmp.mapping(function(fallback)
-                    if cmp.visible() then
-                        cmp.select_next_item()
-                    elseif require("luasnip").expand_or_jumpable() then
-                        vim.fn.feedkeys(
-                            vim.api.nvim_replace_termcodes("<Plug>luasnip-expand-or-jump", true, true, true), "")
-                    else
-                        fallback()
-                    end
-                end, {"i", "s"}),
-                ["<S-Tab>"] = cmp.mapping(function(fallback)
-                    if cmp.visible() then
-                        cmp.select_prev_item()
-                    elseif require("luasnip").jumpable(-1) then
-                        vim.fn.feedkeys(vim.api.nvim_replace_termcodes("<Plug>luasnip-jump-prev", true, true, true), "")
-                    else
-                        fallback()
-                    end
-                end, {"i", "s"})
             },
             sources = {{
                 name = "nvim_lsp"
-            }, {
-                name = "luasnip"
-            }, {
-                name = "buffer",
-                option = {
-                    -- Avoid accidentally running on big files
-                    get_bufnrs = function()
-                        local buf = vim.api.nvim_get_current_buf()
-                        local byte_size = vim.api.nvim_buf_get_offset(buf, vim.api.nvim_buf_line_count(buf))
-                        if byte_size > 1024 * 1024 then -- 1 Megabyte max
-                            return {}
-                        end
-                        return {buf}
-                    end
-                }
-            }, {
-                name = "nvim_lua"
-            }, {
-                name = "path"
-            }}
+            },{
+                name = "buffer"
+            }},
         }
 
         return options
