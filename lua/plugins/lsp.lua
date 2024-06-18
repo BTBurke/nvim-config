@@ -71,11 +71,15 @@ return {{
             gopls = {},
             vimls = {},
             yamlls = {},
-            tsserver = {}
+            tsserver = {},
+            gleam = {}
         },
         -- you can do any additional lsp server setup here
         -- return true if you don"t want this server to be setup with lspconfig
         setup = {
+            gleam = function(_, opts)
+              require("lspconfig").gleam.setup({})
+            end
             -- example to setup with typescript.nvim
             -- tsserver = function(_, opts)
             --   require("typescript").setup({ server = opts })
