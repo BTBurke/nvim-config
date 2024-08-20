@@ -10,37 +10,29 @@
 -- Description: Key mapping configs
 
 local wk = require("which-key")
-wk.register({
-  f = {
-    name = "file", -- optional group name
-    f = { "<cmd>Telescope find_files<cr>", "Find file" },
-    b = { "<cmd>Telescope buffers<cr>", "Find buffer"},
-    r = { "<cmd>Telescope oldfiles<cr>", "Open recent file" },
-    g = { "<cmd>Telescope live_grep", "Find in files"},
-    n = { "New File" },
-  },
-  l = {
-    name = "language",
-    t = { "<cmd>GoTest -v<cr>", "Go test (current pkg)"},
-    f = { "<cmd>GoTest -f<cr>", "Go test (current file)"},
-    n = { "<cmd>GoTest -n<cr>", "Go test (nearest testfunc)"},
-    s = { "<cmd>GoTestSum<cr>", "Go test summary"},
-    o = { "<cmd>GoAlt!<cr>", "Open matching impl/test file"},
-    d = { "<cmd>GoDoc<cr>", "Show Go doc"},
-  },
-  t = {
-    name = "terminal",
-    t = { "<cmd>ToggleTerm<cr>", "Toggle terminal"},
-    b = { "<cmd>lua _gitbug_toggle()<cr>", "Open git bug in termui"},
-  },
-  w = {
-    name = "window",
-    h = {"<cmd>wincmd h<cr>", "Move to left"},
-    j = {"<cmd>wincmd j<cr>", "Move to below"},
-    k = {"<cmd>wincmd k<cr>", "Move to above"},
-    l = {"<cmd>wincmd l<cr>", "Move to right"},
-  }
-}, { prefix = "<leader>" })
+wk.add({
+    { "<leader>f", group = "file" },
+    { "<leader>fb", "<cmd>Telescope buffers<cr>", desc = "Find buffer" },
+    { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find file" },
+    { "<leader>fg", "<cmd>Telescope live_grep", desc = "Find in files" },
+    { "<leader>fn", desc = "New File" },
+    { "<leader>fr", "<cmd>Telescope oldfiles<cr>", desc = "Open recent file" },
+    { "<leader>l", group = "language" },
+    { "<leader>ld", "<cmd>GoDoc<cr>", desc = "Show Go doc" },
+    { "<leader>lf", "<cmd>GoTest -f<cr>", desc = "Go test (current file)" },
+    { "<leader>ln", "<cmd>GoTest -n<cr>", desc = "Go test (nearest testfunc)" },
+    { "<leader>lo", "<cmd>GoAlt!<cr>", desc = "Open matching impl/test file" },
+    { "<leader>ls", "<cmd>GoTestSum<cr>", desc = "Go test summary" },
+    { "<leader>lt", "<cmd>GoTest -v<cr>", desc = "Go test (current pkg)" },
+    { "<leader>t", group = "terminal" },
+    { "<leader>tb", "<cmd>lua _gitbug_toggle()<cr>", desc = "Open git bug in termui" },
+    { "<leader>tt", "<cmd>ToggleTerm<cr>", desc = "Toggle terminal" },
+    { "<leader>w", group = "window" },
+    { "<leader>wh", "<cmd>wincmd h<cr>", desc = "Move to left" },
+    { "<leader>wj", "<cmd>wincmd j<cr>", desc = "Move to below" },
+    { "<leader>wk", "<cmd>wincmd k<cr>", desc = "Move to above" },
+    { "<leader>wl", "<cmd>wincmd l<cr>", desc = "Move to right" },
+  })
 
 -- NvimTree
 -- vim.keymap.set("n", "<leader>n", ":NvimTreeToggle<CR>", {}) -- open/close
