@@ -26,6 +26,7 @@ wk.add({
     { "<leader>lt", "<cmd>GoTest -v<cr>", desc = "Go test (current pkg)" },
     { "<leader>t", group = "terminal" },
     { "<leader>tb", "<cmd>lua _gitbug_toggle()<cr>", desc = "Open git bug in termui" },
+    { "<leader>tc", "<cmd>lua _claude_toggle()<cr>", desc = "Open Claude code in termui" },
     { "<leader>tt", "<cmd>ToggleTerm<cr>", desc = "Toggle terminal" },
     { "<leader>w", group = "window" },
     { "<leader>wh", "<cmd>wincmd h<cr>", desc = "Move to left" },
@@ -60,6 +61,23 @@ local gitbug = Terminal:new({
 
 function _gitbug_toggle()
   gitbug:toggle()
+end
+
+local claude = Terminal:new({
+  cmd = "claude",
+  dir = "git_dir",
+  hidden = true,
+  display_name = "Claude",
+  direction = "tab",
+  terminal = "/usr/bin/fish",
+  on_open = function(term)
+    vim.cmd("startinsert!")
+    vim.api.nvim_buf_set_keymap(term.bufnr, "n", "q", "<cmd>close<CR>", {noremap = true, silent = true})
+  end,
+})
+
+function _claude_toggle()
+  claude:toggle()
 end
 
 function _G.set_terminal_keymaps()
