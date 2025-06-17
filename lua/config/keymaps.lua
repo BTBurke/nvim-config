@@ -28,7 +28,7 @@ wk.add({
     { "<leader>t", group = "terminal" },
     { "<leader>tb", "<cmd>lua _gitbug_toggle()<cr>", desc = "Open git bug in termui" },
     { "<leader>tc", "<cmd>lua _claude_toggle()<cr>", desc = "Open Claude code in termui" },
-    { "<leader>tt", "<cmd>ToggleTerm<cr>", desc = "Toggle terminal" },
+    { "<leader>tt", "<cmd>ToggleTerm direction=tab name='terminal'<cr>", desc = "Toggle terminal" },
     { "<leader>w", group = "window" },
     { "<leader>wh", "<cmd>wincmd h<cr>", desc = "Move to left" },
     { "<leader>wj", "<cmd>wincmd j<cr>", desc = "Move to below" },
