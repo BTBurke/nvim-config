@@ -41,6 +41,10 @@ wk.add({
 -- vim.keymap.set("n", "<leader>nr", ":NvimTreeRefresh<CR>", {}) -- refresh
 -- vim.keymap.set("n", "<leader>nf", ":NvimTreeFindFile<CR>", {}) -- search file
 
+-- for code actions
+vim.keymap.set({ "n", "x" }, "<leader>ca", function()
+	require("tiny-code-action").code_action()
+end, { noremap = true, silent = true })
 
 local Terminal  = require('toggleterm.terminal').Terminal
 -- run git bug in a floating terminal window. Overrides editor to use nano because

@@ -143,7 +143,34 @@ return {{
         })
 --        require("mason-lspconfig").setup_handlers({setup})
     end
-}, {
+},{
+     "rachartier/tiny-inline-diagnostic.nvim",
+    event = "VeryLazy",
+    priority = 1000,
+    config = function()
+        require('tiny-inline-diagnostic').setup({
+        preset = 'simple',
+      })
+        vim.diagnostic.config({ virtual_text = false }) -- Disable default virtual text
+    end
+  }, {
+    "rachartier/tiny-code-action.nvim",
+    dependencies = {
+        {"nvim-lua/plenary.nvim"},
+        -- optional picker via telescope
+        {"nvim-telescope/telescope.nvim"},
+    },
+    event = "LspAttach",
+    opts = {},
+  }, {
+    "fnune/codeactions-on-save.nvim",
+    config = function()
+      local cos = require("codeactions-on-save")
+      cos.register({ "*.gleam" }, { "source.fixAll", "source.organizeImports", "source.removeUnusedImports", "refactor.rewrite" })
+      cos.register({ "*.ts", "*.tsx" }, { "source.organizeImports" })
+    end
+  },
+  {
     -- load luasnips + cmp related in insert mode only
     "hrsh7th/nvim-cmp",
     event = "InsertEnter",
@@ -207,12 +234,19 @@ return {{
             window = {
                 completion = {
                     autocomplete = false,
-                    winhighlight = "Normal:CmpPmenu,CursorLine:CmpSel,Search:PmenuSel",
-                    scrollbar = false
+                    -- winhighlight = "Normal:CmpPmenu,CursorLine:CmpSel,Search:PmenuSel",
+                    winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None",
+                    border = "rounded",
+                    side_padding = 1,
+                    scrollbar = false,
+                    zindex = 1001
                 },
                 documentation = {
-                    border = border "CmpDocBorder",
-                    winhighlight = "Normal:CmpDoc"
+                    winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None",
+                    border = "rounded",
+                    side_padding = 1,
+                    scrollbar = false,
+                    zindex = 1001
                 }
             },
             snippet = {
